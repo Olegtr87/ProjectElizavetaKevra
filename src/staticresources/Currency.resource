@@ -1,0 +1,1 @@
+{"Cur_ID":145,"Date":"2019-07-08T00:00:00","Cur_Abbreviation":"USD","Cur_Scale":1,"Cur_Name":"Äמככאנ ÑØÀ","Cur_OfficialRate":2.0488}

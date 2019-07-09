@@ -20,25 +20,20 @@ public class CurrencyWorkingClassTest{
     @isTest
     private static void testStart(){ 
         
-        Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock());
-        
-        Test.startTest();    
-        CurrencyWorkingClass.start();  
+        Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(200));
+        Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(400));
+        Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(404));
+
+
+        Test.startTest();
+        Integer[] codes = new Integer[]{145, 298, 292};
+        CurrencyWorking currencies = new CurrencyWorking(codes);
+        currencies.start();
         Test.stopTest();
         
         List<Currency__c> listOfRates = [select Name, Rate__c, Date__c, Currency__c from Currency__c where Date__c =: Date.today()];
         
         System.assertEquals(3, listOfRates.size());        
     }
-    
-    @isTest
-    public static void testRestRequest(){
-        
-        StaticResourceCalloutMock mock = new StaticResourceCalloutMock();
-        mock.setStaticResource('Currency');
-        mock.setStatusCode(200);
-        mock.setHeader('Content-Type', 'application/json;charset=UTF-8');
-        
-        Test.setMock(HttpCalloutMock.class, mock);           
-    }       
+
 }

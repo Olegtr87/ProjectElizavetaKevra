@@ -2,22 +2,17 @@ public class CurrencyWorking {
 
     private List<WorkWithCurrency.Rate> listOfRates = new List<WorkWithCurrency.Rate>();
     private List<Currency__c> listOfCurrencies = new List<Currency__c>();
-    private Integer[] statusCodes;
+    private List<Integer> statusCodes;
     private Date dateForRate;
 
-    public CurrencyWorking(Integer[] codes, Date dateForRate){
+    public CurrencyWorking(List<Integer> codes, Date dateForRate){
         this.statusCodes = codes;
         this.dateForRate = dateForRate;
     }
 
-    public CurrencyWorking(Integer[] codes){
-        this.statusCodes = codes;
-        this.dateForRate = Date.today();
-    }
-
     public void start(){
-        for(Integer i : this.statusCodes){
-            restRequest(this.statusCodes[i]);
+        for(Integer count = 0; count < this.statusCodes.size(); count++){
+            restRequest(this.statusCodes.get(count));
         }
 
         for(WorkWithCurrency.Rate rate : this.listOfRates){
@@ -55,8 +50,8 @@ public class CurrencyWorking {
 
         Currency__c newCurrency = new Currency__c();
 
-        newCurrency.Name = abbreviation + ' ' + String.valueOf(Date.today());
-        newCurrency.Date__c = Date.today();
+        newCurrency.Name = abbreviation + ' ' + String.valueOf(this.dateForRate);
+        newCurrency.Date__c = this.dateForRate;
         newCurrency.Currency__c = abbreviation;
         newCurrency.Rate__c = rate;
 

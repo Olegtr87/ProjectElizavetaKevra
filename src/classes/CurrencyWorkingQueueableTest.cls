@@ -7,11 +7,16 @@ global class CurrencyWorkingQueueableTest{
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(400));
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(404));
         
+        List<Integer> codes = new List<Integer>(3);
+        codes.add(145);
+        codes.add(292);
+        codes.add(298);
+        
         Test.startTest();        
-        System.enqueueJob(new CurrencyWorkingQueueable());    
+        System.enqueueJob(new CurrencyWorkQueueable(codes, Date.today()));    
         Test.stopTest();
 
         List<Currency__c> listOfRates = [select Name, Rate__c, Date__c, Currency__c from Currency__c];
-        System.assertEquals(3, listOfRates.size());
+        System.assertEquals(1, listOfRates.size());
     }
 }

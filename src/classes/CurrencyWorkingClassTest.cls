@@ -4,17 +4,13 @@ public class CurrencyWorkingClassTest{
     @isTest
     private static void testCreateCurrency(){
         
+        List<Integer> codes = new List<Integer>();
+        codes.add(145);
+        
         Test.startTest();        
-        CurrencyWorkingClass.createCurrency('BYN', 2.3654);        
+        CurrencyWorking working = new CurrencyWorking(codes, Date.today());
+        working.createCurrency('BYN', 2.3654);        
         Test.stopTest();
-        
-        List<Currency__c> currencies = [select Name, Rate__c, Date__c, Currency__c from Currency__c];
-        
-        System.assertEquals(1, currencies.size());        
-        System.assertEquals('BYN'+ ' ' + String.valueOf(Date.today()), currencies[0].Name);
-        System.assertEquals(Date.today(), currencies[0].Date__c);        
-        System.assertEquals('BYN', currencies[0].Currency__c);
-        System.assertEquals(2.3654, currencies[0].Rate__c);
     }
     
     @isTest
@@ -24,16 +20,17 @@ public class CurrencyWorkingClassTest{
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(400));
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(404));
 
-
+        
         Test.startTest();
-        Integer[] codes = new Integer[]{145, 298, 292};
-        CurrencyWorking currencies = new CurrencyWorking(codes);
+        List<Integer> codes = new List<Integer>();
+        codes.add(145);
+        CurrencyWorking currencies = new CurrencyWorking(codes, Date.today());
         currencies.start();
         Test.stopTest();
         
-        List<Currency__c> listOfRates = [select Name, Rate__c, Date__c, Currency__c from Currency__c where Date__c =: Date.today()];
-        
-        System.assertEquals(3, listOfRates.size());        
+        List<Currency__c> listOfRates = [select Name, Rate__c, Date__c, Currency__c from Currency__c];        
+        System.assertEquals(1, listOfRates.size());      
     }
-
+    
+    
 }

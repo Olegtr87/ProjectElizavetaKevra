@@ -10,13 +10,18 @@ public class CurrencyWorkingScheduleTest {
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(400));
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(404));
         
+        List<Integer> codes = new List<Integer>(3);
+        codes.add(145);
+        codes.add(292);
+        codes.add(298);
+        
         Test.StartTest();
-            String jobId = System.schedule('Daily Currency Updating'+System.now(),  CRON_EXP,  new CurrencyWorkingSchedule ());
+            String jobId = System.schedule('Daily Currency Updating'+System.now(),  CRON_EXP,  new CurrencyWorkSchedule(codes));
             CronTrigger ct = [SELECT Id, CronExpression, TimesTriggered, NextFireTime FROM CronTrigger WHERE id = :jobId];
             System.assertEquals(CRON_EXP, ct.CronExpression);
         Test.stopTest();
 
         List<Currency__c> listOfRates = [select Name, Rate__c, Date__c, Currency__c from Currency__c];
-        System.assertEquals(3, listOfRates.size());
+        System.assertEquals(1, listOfRates.size());
     }
 }

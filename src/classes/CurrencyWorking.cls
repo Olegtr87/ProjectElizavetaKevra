@@ -4,10 +4,12 @@ public class CurrencyWorking {
     private List<Currency__c> listOfCurrencies = new List<Currency__c>();
     private List<Integer> statusCodes;
     private Date dateForRate;
+    private String nameOfMetadataType;
 
-    public CurrencyWorking(List<Integer> codes, Date dateForRate){
+    public CurrencyWorking(List<Integer> codes, Date dateForRate, String metadataType){
         this.statusCodes = codes;
         this.dateForRate = dateForRate;
+        this.nameOfMetadataType = metadataType;
     }
 
     public void start(){
@@ -27,7 +29,11 @@ public class CurrencyWorking {
         try{
             Http http = new Http();
             HttpRequest request = new HttpRequest();
-            request.setEndpoint('http://www.nbrb.by/API/ExRates/Rates/' + code + '?onDate=' + dateForRate.year() + '-' + dateForRate.month() + '-' + dateForRate.day() + '&');
+
+            List<Currency_URL__mdt> informationFromMetadata = [SELECT DeveloperName, URL__c FROM Currency_URL__mdt 
+                                                               WHERE DeveloperName =: this.nameOfMetadataType];
+			request.setEndpoint(informationFromMetadata.get(0).URL__c + '/' + code + '?onDate=' + dateForRate.year() 
+                                + '-' + dateForRate.month() + '-' + dateForRate.day() + '&');
             request.setMethod('GET');
             HttpResponse response = http.send(request);
 

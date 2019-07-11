@@ -11,7 +11,7 @@ global class CurrencyWorkingQueueableTest{
         codes.add(145);
         codes.add(292);
         codes.add(298);
-        String name = 'Currency_URL_with_date';
+        String name = 'Currency_Rest_Service';
         
         Test.startTest();        
         System.enqueueJob(new CurrencyWorkingQueueable(codes, Date.today(), name));

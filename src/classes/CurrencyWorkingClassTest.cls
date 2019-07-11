@@ -4,7 +4,7 @@ public class CurrencyWorkingClassTest{
     @isTest
     private static void testCreateCurrency(){
 
-        String name = 'Currency_URL_with_date';
+        String name = 'Currency_Rest_Service';
 
         List<Integer> codes = new List<Integer>();
         codes.add(145);
@@ -22,7 +22,7 @@ public class CurrencyWorkingClassTest{
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(400));
         Test.setMock(HttpCalloutMock.class, CurrencyHttpCalloutMock.getMock(404));
 
-        String name = 'Currency_URL_with_date';
+        String name = 'Currency_Rest_Service';
         Test.startTest();
         List<Integer> codes = new List<Integer>();
         codes.add(145);

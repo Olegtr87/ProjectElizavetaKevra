@@ -14,7 +14,7 @@ public class CurrencyWorkingScheduleTest {
         codes.add(145);
         codes.add(292);
         codes.add(298);
-        String name = 'Currency_URL_with_date';
+        String name = 'Currency_Rest_Service';
         
         Test.StartTest();
             String jobId = System.schedule('Daily Currency Updating'+System.now(),  CRON_EXP,  new CurrencyWorkingSchedule(codes, name));

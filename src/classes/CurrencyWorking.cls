@@ -30,9 +30,7 @@ public class CurrencyWorking {
             Http http = new Http();
             HttpRequest request = new HttpRequest();
 
-            List<Currency_URL__mdt> informationFromMetadata = [SELECT DeveloperName, URL__c FROM Currency_URL__mdt 
-                                                               WHERE DeveloperName =: this.nameOfMetadataType];
-			request.setEndpoint(informationFromMetadata.get(0).URL__c + '/' + code + '?onDate=' + dateForRate.year() 
+			request.setEndpoint(CurrencyManager.getURL(this.nameOfMetadataType) + '/' + code + '?onDate=' + dateForRate.year()
                                 + '-' + dateForRate.month() + '-' + dateForRate.day() + '&');
             request.setMethod('GET');
             HttpResponse response = http.send(request);

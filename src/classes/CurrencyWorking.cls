@@ -1,6 +1,6 @@
 public class CurrencyWorking {
 
-    private List<WorkWithCurrency.Rate> listOfRates = new List<WorkWithCurrency.Rate>();
+    private List<CurrencyWorking.Rate> listOfRates = new List<CurrencyWorking.Rate>();
     private List<Currency__c> listOfCurrencies = new List<Currency__c>();
     private List<Integer> statusCodes;
     private Date dateForRate;
@@ -15,7 +15,7 @@ public class CurrencyWorking {
             restRequest(this.statusCodes.get(count));
         }
 
-        for(WorkWithCurrency.Rate rate : this.listOfRates){
+        for(CurrencyWorking.Rate rate : this.listOfRates){
             createCurrency(rate.Cur_Abbreviation, rate.Cur_OfficialRate);
         }
 
@@ -37,7 +37,7 @@ public class CurrencyWorking {
             }
             else{
                 String jsonString = response.getBody();
-                WorkWithCurrency.Rate rate = (WorkWithCurrency.Rate)JSON.deserialize(jsonString, WorkWithCurrency.Rate.class);
+                CurrencyWorking.Rate rate = (CurrencyWorking.Rate)JSON.deserialize(jsonString, CurrencyWorking.Rate.class);
 
                 this.listOfRates.add(rate);
             }

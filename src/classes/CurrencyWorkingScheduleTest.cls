@@ -16,7 +16,7 @@ public class CurrencyWorkingScheduleTest {
         codes.add(298);
         
         Test.StartTest();
-            String jobId = System.schedule('Daily Currency Updating'+System.now(),  CRON_EXP,  new CurrencyWorkSchedule(codes));
+            String jobId = System.schedule('Daily Currency Updating'+System.now(),  CRON_EXP,  new CurrencyWorkingSchedule(codes));
             CronTrigger ct = [SELECT Id, CronExpression, TimesTriggered, NextFireTime FROM CronTrigger WHERE id = :jobId];
             System.assertEquals(CRON_EXP, ct.CronExpression);
         Test.stopTest();

@@ -13,7 +13,7 @@ global class CurrencyWorkingQueueableTest{
         codes.add(298);
         
         Test.startTest();        
-        System.enqueueJob(new CurrencyWorkQueueable(codes, Date.today()));    
+        System.enqueueJob(new CurrencyWorkingQueueable(codes, Date.today()));
         Test.stopTest();
 
         List<Currency__c> listOfRates = [select Name, Rate__c, Date__c, Currency__c from Currency__c];

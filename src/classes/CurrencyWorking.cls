@@ -29,9 +29,13 @@ public class CurrencyWorking {
         try{
             Http http = new Http();
             HttpRequest request = new HttpRequest();
-
-			request.setEndpoint(CurrencyManager.getURL(this.nameOfMetadataType) + '/' + code + '?onDate=' + dateForRate.year()
-                                + '-' + dateForRate.month() + '-' + dateForRate.day() + '&');
+            try {
+                request.setEndpoint(CurrencyManager.getURL(this.nameOfMetadataType) + '/' + code + '?onDate=' + dateForRate.year()
+                        + '-' + dateForRate.month() + '-' + dateForRate.day() + '&');
+            }
+            catch (Exception exception){
+                exception.getMessage();
+            }
             request.setMethod('GET');
             HttpResponse response = http.send(request);
 

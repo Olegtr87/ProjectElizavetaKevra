@@ -26,26 +26,36 @@ public class CurrencyWorking {
 
     public void restRequest(Integer code){
 
-        try{
-            Http http = new Http();
-            HttpRequest request = new HttpRequest();
-            request.setEndpoint(CurrencyManager.getURL(this.nameOfMetadataType) + '/' + code + '?onDate=' + dateForRate.year()
-                        + '-' + dateForRate.month() + '-' + dateForRate.day() + '&');
-            request.setMethod('GET');
-            HttpResponse response = http.send(request);
+        String pullURL = '';
+        if (CurrencyManager.getURL(this.nameOfMetadataType) == null) {
+            CustomException myException = new CustomException('There is no such URL in Custom Metadata Types.');
+            myException.getMessage();
+        }
+        else{
+            pullURL = CurrencyManager.getURL(this.nameOfMetadataType).URL__c + '/' + code + '?onDate=' + dateForRate.year()
+                    + '-' + dateForRate.month() + '-' + dateForRate.day() + '&';
 
-            if(response.getStatusCode()!=200){
-                System.debug('Page cannot be found.');
-                System.debug('Status code: '+response.getStatusCode());
-            }
-            else{
-                String jsonString = response.getBody();
-                CurrencyWorking.Rate rate = (CurrencyWorking.Rate)JSON.deserialize(jsonString, CurrencyWorking.Rate.class);
+            try{
+                Http http = new Http();
+                HttpRequest request = new HttpRequest();
 
-                this.listOfRates.add(rate);
+                request.setEndpoint(pullURL);
+                request.setMethod('GET');
+                HttpResponse response = http.send(request);
+
+                if(response.getStatusCode()!=200){
+                    System.debug('Page cannot be found.');
+                    System.debug('Status code: '+response.getStatusCode());
+                }
+                else{
+                    String jsonString = response.getBody();
+                    CurrencyWorking.Rate rate = (CurrencyWorking.Rate)JSON.deserialize(jsonString, CurrencyWorking.Rate.class);
+
+                    this.listOfRates.add(rate);
+                }
+            } catch(CalloutException calloutException){
+                calloutException.getMessage();
             }
-        } catch(CalloutException calloutException){
-            calloutException.getMessage();
         }
     }
 
@@ -68,5 +78,4 @@ public class CurrencyWorking {
         public String Cur_Name;
         public Decimal Cur_OfficialRate;
     }
-
 }

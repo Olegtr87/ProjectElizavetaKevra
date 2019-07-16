@@ -9,28 +9,31 @@ public class CurrencyManager {
         return informationFromMetadata.get(0);
     }
     
-    
-    public static List<Currency__c> getListOfCurrency(Date specialDate){
-        List<Currency__c> result =  [SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c
-        WHERE Date__c = :specialDate];
+    public static List<SObject> getListOfCurrency(Map<String, Object> conditions){
+        Integer i = 0;
+        String query = 'SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c';
+        if (!conditions.isEmpty()) {
+            query = query + ' WHERE ';
+            for (String field : conditions.keySet()) {                
+                if(field == 'Currency__c'){
+                    if(i>0){
+                        query = query + ' AND ';
+                    }
+                    i++;
+                    String abbr = String.valueOf(conditions.get(field));
+                    query = query + field + '=: abbr ';
+                }               
+                if(field == 'Date__c'){
+                    if(i>0){
+                        query = query + ' AND ';
+                    }
+                    i++;
+                    Date theDate = Date.valueOf(String.valueOf(conditions.get(field)));                    
+                    query = query + field + '=: theDate ';
+                }  
+            }
+        }
+        List<SObject> result = Database.query(query);
         return result;
-    }
-
-    public static List<Currency__c> getListOfCurrency(String abbreviation){
-        List<Currency__c> result =  [SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c
-        WHERE Currency__c = :abbreviation];
-        return result;
-    }
-    
-    public static List<Currency__c> getListOfCurrency(){
-        List<Currency__c> result =  [SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c];
-        return result;
-    }
-    public static List<Currency__c> getListOfCurrency(Date specialDate, String abbreviation){
-        List<Currency__c> result =  [SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c
-        WHERE Date__c = :specialDate AND Currency__c = :abbreviation];
-        return result;
-    }
-
-    
+    }    
 }

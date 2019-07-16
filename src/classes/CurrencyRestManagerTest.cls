@@ -24,13 +24,11 @@ private class CurrencyRestManagerTest {
         Currency__c curr = createTestCurrency();
         insert curr;
         
-        Date theDate = Date.newInstance(2019, 7, 7);
-        String abbreviation = 'EUR';
-        
         Test.startTest();
-        List<Currency__c> currencies1 = CurrencyRestManager.doGet(theDate);
-        List<Currency__c> currencies2 = CurrencyRestManager.doGet(abbreviation);
-        List<Currency__c> currencies3 = CurrencyRestManager.doGet(theDate, abbreviation);
+        List<Currency__c> currencies1 = CurrencyRestManager.doGet('2019-7-7', 'EUR');
+        List<Currency__c> currencies2 = CurrencyRestManager.doGet('','EUR');
+        List<Currency__c> currencies3 = CurrencyRestManager.doGet('2019-7-7','');
+        List<Currency__c> currencies4 = CurrencyRestManager.doGet('','');
         Test.stopTest();
         
         System.assertEquals(1, currencies1.size());

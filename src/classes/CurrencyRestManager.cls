@@ -4,32 +4,38 @@ global class CurrencyRestManager {
     @HttpGet
     global static List<Currency__c> getCurrency(){
         
-        if(RestContext.request.params.get('date')!=null || RestContext.request.params.get('abbreviation')==null){
-            return doGet(Date.valueOf(RestContext.request.params.get('date')));
-        }
-        else if(RestContext.request.params.get('date')==null || RestContext.request.params.get('abbreviation')!=null){
-            return doGet(RestContext.request.params.get('abbreviation'));
-        }
-        else{
-            return doGet(Date.valueOf(RestContext.request.params.get('date')), RestContext.request.params.get('abbreviation'));
-        }
+        String thisDate;
+        if(RestContext.request.params.get('date') != null){
+            thisDate = RestContext.request.params.get('date');
+        } else { thisDate = ''; }
+
+		String thisAbbreviation;
+		if(RestContext.request.params.get('abbreviation') != null){
+            thisAbbreviation = RestContext.request.params.get('abbreviation');
+        } else { thisAbbreviation = ''; }
+
+        return doGet(thisDate, thisAbbreviation);        
     }
     
-    public static List<Currency__c> doGet(Date specialDate, String abbreviation){        
-        List<Currency__c> result =  [SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c 
-                                     WHERE Date__c = :specialDate AND Currency__c = :abbreviation];
-        return result;
-    }
     
-    public static List<Currency__c> doGet(Date specialDate){        
-        List<Currency__c> result =  [SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c 
-                                     WHERE Date__c = :specialDate];
+    public static List<Currency__c> doGet(String thisDate, String thisAbbreviation){
+        
+        List<Currency__c> result;
+        
+		if(String.isEmpty(thisDate) && String.isEmpty(thisAbbreviation)){            
+            result =  CurrencyManager.getListOfCurrency();
+        }
+        if(!String.isEmpty(thisDate) && String.isEmpty(thisAbbreviation)){            
+            result =  CurrencyManager.getListOfCurrency(Date.valueOf(thisDate));
+        }
+        if(String.isEmpty(thisDate) && !String.isEmpty(thisAbbreviation)){            
+            result =  CurrencyManager.getListOfCurrency(thisAbbreviation);
+        }
+        
+        if(!String.isEmpty(thisDate) && !String.isEmpty(thisAbbreviation)){            
+            result =  CurrencyManager.getListOfCurrency(Date.valueOf(thisDate), thisAbbreviation);
+        }
+        
         return result;
-    }
-    
-    public static List<Currency__c> doGet(String abbreviation){
-        List<Currency__c> result =  [SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c 
-                                     WHERE Currency__c = :abbreviation];
-        return result;
-    }
+    } 
 }

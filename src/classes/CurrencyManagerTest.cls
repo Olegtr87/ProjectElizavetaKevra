@@ -22,19 +22,15 @@ public class CurrencyManagerTest {
         Currency__c curr = createTestCurrency();
         insert curr;
         
+        Map<String, Object> m1 = new Map<String, Object>();
+		m1.put('Date__c', Date.newInstance(2019, 7, 7));
+		m1.put('Currency__c', 'EUR');
+        
         Test.startTest();
-        List<Currency__c> currencies1 = CurrencyManager.getListOfCurrency(Date.valueOf('2019-7-7'), 'EUR');
-        List<Currency__c> currencies2 = CurrencyManager.getListOfCurrency('EUR');
-        List<Currency__c> currencies3 = CurrencyManager.getListOfCurrency(Date.valueOf('2019-7-7'));
-        List<Currency__c> currencies4 = CurrencyManager.getListOfCurrency();
+        List<SObject> objects = CurrencyManager.getListOfCurrency(m1);
         Test.stopTest();
         
-        System.assertEquals(1, currencies1.size());
-        System.assertEquals('test', currencies1.get(0).Name);
-        System.assertEquals(1, currencies2.size());
-        System.assertEquals('EUR', currencies2.get(0).Currency__c);
-        System.assertEquals(1, currencies3.size());
-        System.assertEquals(Date.newInstance(2019, 7, 7), currencies3.get(0).Date__c);
+        System.assertEquals(1, objects.size());
     }  
     
     private static Currency__c createTestCurrency(){

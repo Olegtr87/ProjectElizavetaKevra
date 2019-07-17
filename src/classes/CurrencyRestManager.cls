@@ -5,9 +5,10 @@ global class CurrencyRestManager {
     global static List<Currency__c> getCurrency(){
         
         Map<String, Object> conditions = new Map<String, Object>();
-        if (RestContext.request.params.get('date') != null) conditions.put('Date__c', RestContext.request.params.get('date'));
+        
+        if (RestContext.request.params.get('date') != null) conditions.put('Date__c', Date.valueOf(RestContext.request.params.get('date')));
         if (RestContext.request.params.get('abbreviation') != null) conditions.put('Currency__c', RestContext.request.params.get('abbreviation'));
-
+        
         return doGet(conditions);
     }
 

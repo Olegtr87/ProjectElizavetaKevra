@@ -10,30 +10,22 @@ public class CurrencyManager {
     }
     
     public static List<SObject> getListOfCurrency(Map<String, Object> conditions){
-        Integer i = 0;
         String query = 'SELECT Id, Name, Rate__c, Date__c, Currency__c FROM Currency__c';
         if (!conditions.isEmpty()) {
             query = query + ' WHERE ';
             for (String field : conditions.keySet()) {                
                 if(field == 'Currency__c'){
-                    if(i>0){
-                        query = query + ' AND ';
-                    }
-                    i++;
-                    String abbr = String.valueOf(conditions.get(field));
-                    query = query + field + '=: abbr ';
+                    String abbr = (String)conditions.get(field);
+                    query = query + field + '=: abbr ' + ' AND ';
                 }               
                 if(field == 'Date__c'){
-                    if(i>0){
-                        query = query + ' AND ';
-                    }
-                    i++;
-                    Date theDate = Date.valueOf(String.valueOf(conditions.get(field)));                    
-                    query = query + field + '=: theDate ';
+                    Date theDate = (Date)conditions.get(field);                    
+                    query = query + field + '=: theDate ' + ' AND ';
                 }  
             }
+            query = query.substringBeforeLast(' AND ');
         }
         List<SObject> result = Database.query(query);
         return result;
-    }    
+    }
 }

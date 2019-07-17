@@ -23,8 +23,8 @@ public class CurrencyManagerTest {
         insert curr;
         
         Map<String, Object> m1 = new Map<String, Object>();
-		m1.put('Date__c', Date.newInstance(2019, 7, 7));
-		m1.put('Currency__c', 'EUR');
+		m1.put('Date__c', String.valueOf(Date.newInstance(2019, 7, 7)));
+		m1.put('Currency__c', '\''+ 'EUR' +'\'');
         
         Test.startTest();
         List<SObject> objects = CurrencyManager.getListOfCurrency(m1);
